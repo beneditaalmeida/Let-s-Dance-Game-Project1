@@ -4,9 +4,12 @@ class Game {
         this.context = this.canvas.getContext('2d');
         this.dancer = new Dancer (this);
         this.grid = new Grid (this)
-        this.comands = new Comands (this);
-        this.counter = 0
-        this.speed = 1.5
+        this.logo = new Logo (this);
+        this.comands = new Comands (this, this.dancer);
+        this.ScoreBoard = new ScoreBoard(this);
+        this.score = 15;
+        this.timer = 0;
+        this.speed = 1000;
         this.activeCircles = {
             up: false,
             down: false,
@@ -14,6 +17,7 @@ class Game {
             right: false,
             left: false
         }
+
         this.setCircles();
 
         this.callbacks = {
@@ -29,44 +33,80 @@ class Game {
     }
 
     setCircles () {
-        if (this.counter % this.speed === 0){
-            let circles = ['up', 'down', 'middle', 'right', 'left'];
-            let randomCircle = circles[Math.floor(Math.random() * circles.length)];
-     
-            this.activeCircles = {
-                 up: false,
-                 down: false,
-                 middle: false,
-                 right: false,
-                 left: false
-             }
-             this.activeCircles[randomCircle] = true;
-
+        let circles = ['up', 'down', 'middle', 'right', 'left'];
+        let randomCircle = circles[Math.floor(Math.random() * circles.length)];
+    
+        this.activeCircles = {
+            up: false,
+            down: false,
+            middle: false,
+            right: false,
+            left: false
         }
+        this.activeCircles[randomCircle] = true;
+
+    }
+
+    /*
+    const object = {
+        name: 'Jose',
+        age: 26
+    };
+    const entries = Object.entries(object);
+    // Entries is going to equal
+    // [ [ 'name', 'José' ], ['age', 26 ] ]
+    */
+
+    checkIfRight () {
+        let circle = Object.entries(this.activeCircles).reduce(function (direction, value) {
+            if (value[1] === true) {
+                return value[0];
+            } else {
+                return direction;
+            }
+        }, null);
+        const dancerDirection = this.dancer.dancerDirection;
+
+        if (dancerDirection === circle) {
+            this.score++;
+        } else {
+            this.score -= 3;
+        }
+
+        if (this.score <= -3){
+            this.score = 0;
+            randomCircle = false;
+            console.log("Game Over")
+        }
+        this.dancer.dancerDirection = 'stop';
+    }
+
+       
+    runLogic(){
+        this.checkIfRight();
+        this.setCircles();
     }
     
-    loop () {
-        this.counter++
-        console.log (this.counter)
-
-        // Run game logic
-        this.setCircles();
+    loop (timestamp) {
+        if (this.timer < timestamp - this.speed) {
+            this.runLogic();
+            this.timer = timestamp;
+        }
         // Paint game state
         this.paint();
         // Run loop again
-        // window.requestAnimationFrame(() => {
-        //    this.loop();
-        // });
-        setTimeout(() => {
-            this.loop();
-        }, 300)
+        window.requestAnimationFrame(timestamp => {
+            this.loop(timestamp);
+        });
     }
 
     paint () {
         this.context.clearRect(0,0, 900, 600);
-        this.dancer.paint();
         this.grid.paint();
+        this.logo.paint();
+        this.dancer.paint();
         this.comands.paint();
-      }
+        this.ScoreBoard.paint();
+    }
 
 }

@@ -10,6 +10,7 @@ class Comands{
 
     }
 
+
     _paintCircle (x, y, active) {
         const context = this.game.context;
 
@@ -30,13 +31,14 @@ class Comands{
         
         context.save();
 
-        this._paintCircle(this.widthX,this.heightY, activeCircles.up)
-        this._paintCircle(this.widthY,this.heightY, activeCircles.down)
-        this._paintCircle(this.widthZ,this.heightY, activeCircles.middle)
-        this._paintCircle(this.widthY,this.heightZ, activeCircles.right)
-        this._paintCircle(this.widthY,this.heightX, activeCircles.left)
+        this._paintCircle(this.widthX,this.heightY, activeCircles.right)
+        this._paintCircle(this.widthY,this.heightY, activeCircles.middle)
+        this._paintCircle(this.widthZ,this.heightY, activeCircles.left)
+        this._paintCircle(this.widthY,this.heightZ, activeCircles.up)
+        this._paintCircle(this.widthY,this.heightX, activeCircles.down)
 
         context.restore();
+  
 
     }
 }

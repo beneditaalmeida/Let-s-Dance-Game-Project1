@@ -14,14 +14,14 @@ class Grid{
                 context.beginPath();
                 context.moveTo(x,0);
                 context.lineTo(x,height);
-                context.stroke();
+                //context.stroke();
             };
             
             for(let y=0; y <= height; y += height/6) {
                 context.beginPath();
                 context.moveTo(0,y);
                 context.lineTo(width,y);
-                context.stroke();
+                //context.stroke();
             }   
         }
         drawGrid()
