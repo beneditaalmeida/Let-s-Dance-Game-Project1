@@ -3,11 +3,12 @@ class Game {
         this.canvas = canvas;
         this.context = this.canvas.getContext('2d');
         this.dancer = new Dancer (this);
-        this.grid = new Grid (this)
+        this.grid = new Grid (this);
         this.logo = new Logo (this);
         this.comands = new Comands (this, this.dancer);
         this.ScoreBoard = new ScoreBoard(this);
-        this.score = 15;
+        this.GameOver = new GameOver(this);
+        this.score = 20;
         this.timer = 0;
         this.speed = 1000;
         this.activeCircles = {
@@ -68,19 +69,30 @@ class Game {
         const dancerDirection = this.dancer.dancerDirection;
 
         if (dancerDirection === circle) {
-            this.score++;
+            this.score += 5;
         } else {
-            this.score -= 3;
+            this.score -= 5;
         }
 
-        if (this.score <= -3){
-            this.score = 0;
-            randomCircle = false;
-            console.log("Game Over")
+        if (this.score <= -5){
+            this.gameOver();
+        
         }
         this.dancer.dancerDirection = 'stop';
     }
 
+
+    start(){
+        setTimeout (() => {
+            this.loop(0)
+        }, 500);
+    }
+
+    gameOver(){
+        this.GameOver.paint();
+        randomCircle = false;
+        document.location.reload(true)
+    }
        
     runLogic(){
         this.checkIfRight();
@@ -107,6 +119,7 @@ class Game {
         this.dancer.paint();
         this.comands.paint();
         this.ScoreBoard.paint();
+        
     }
 
 }

@@ -1,5 +1,7 @@
-const $canvas = document.querySelector('canvas');
-
-const game = new Game($canvas);
-
-game.loop(0);
+window.onload = function(){
+    document.getElementById("start-game").onclick = function (){
+        const $canvas = document.querySelector('canvas');
+        const game = new Game($canvas);
+        game.start();
+    }
+}
