@@ -1,3 +1,9 @@
+const SOUNDS = {
+    gameMusic: "music/Under-Pressure.mp3",
+    gameOverMusic: "music/scream.mp3",
+    winMusic: "music/crowd.mp3",
+  };
+
 class Game {
     constructor(canvas) {
         this.canvas = canvas;
@@ -11,6 +17,7 @@ class Game {
         this.score = 20;
         this.timer = 0;
         this.speed = 1000;
+
         this.activeCircles = {
             up: false,
             down: false,
@@ -31,11 +38,15 @@ class Game {
         };
         this.control = new Control(this.callbacks);
         this.control.setKeyBindings();    
+
+       
+        this.sound = new Sound();
+        this.sound.loadSounds(SOUNDS);
     }
 
     setCircles () {
         let circles = ['up', 'down', 'middle', 'right', 'left'];
-        let randomCircle = circles[Math.floor(Math.random() * circles.length)];
+        this.randomCircle = circles[Math.floor(Math.random() * circles.length)];
     
         this.activeCircles = {
             up: false,
@@ -44,19 +55,9 @@ class Game {
             right: false,
             left: false
         }
-        this.activeCircles[randomCircle] = true;
+        this.activeCircles[this.randomCircle] = true;
 
     }
-
-    /*
-    const object = {
-        name: 'Jose',
-        age: 26
-    };
-    const entries = Object.entries(object);
-    // Entries is going to equal
-    // [ [ 'name', 'José' ], ['age', 26 ] ]
-    */
 
     checkIfRight () {
         let circle = Object.entries(this.activeCircles).reduce(function (direction, value) {
@@ -74,6 +75,10 @@ class Game {
             this.score -= 5;
         }
 
+        if (this.score === 300){
+            this.gameWin();
+        }
+
         if (this.score <= -5){
             this.gameOver();
         
@@ -83,15 +88,25 @@ class Game {
 
 
     start(){
+        this.sound.play('gameMusic', { volume: 1 });
         setTimeout (() => {
             this.loop(0)
         }, 500);
     }
 
+    // gameWin(){
+    //     this.GameWin.paint();
+    //     this.sound.play('winMusic', { volume: 1 });
+    //     this.sound.stop('gameMusic');
+    //     randomCircle = false;
+    // }
+
     gameOver(){
         this.GameOver.paint();
+        this.sound.play('gameOverMusic', { volume: 1 });
+        this.sound.stop('gameMusic');
         randomCircle = false;
-        document.location.reload(true)
+        
     }
        
     runLogic(){
@@ -100,6 +115,7 @@ class Game {
     }
     
     loop (timestamp) {
+        
         if (this.timer < timestamp - this.speed) {
             this.runLogic();
             this.timer = timestamp;
