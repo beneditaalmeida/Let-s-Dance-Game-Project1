@@ -10,7 +10,7 @@ class ScoreBoard {
       this.context.translate(50, 450);
       this.context.font = '62px Impact';
       this.context.fillStyle = 'black';
-      this.context.fillText(`${ this.game.score }`, 125, 125);
+      this.context.fillText(`${ this.game.score }`, 300, 125);
       this.context.restore();
     }
   }

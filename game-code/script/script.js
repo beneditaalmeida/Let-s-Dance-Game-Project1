@@ -1,6 +1,7 @@
 window.onload = function(){
     document.getElementById("start-game").onclick = function (){
-        const $canvas = document.querySelector('canvas');
+        document.getElementById("start-game").style.visibility="hidden";
+        const $canvas = document.querySelector('canvas')
         const game = new Game($canvas);
         game.start();
     }

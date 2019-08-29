@@ -14,6 +14,7 @@ class Game {
         this.comands = new Comands (this, this.dancer);
         this.ScoreBoard = new ScoreBoard(this);
         this.GameOver = new GameOver(this);
+        this.GameWin = new GameWin(this);
         this.score = 20;
         this.timer = 0;
         this.speed = 1000;
@@ -42,6 +43,8 @@ class Game {
        
         this.sound = new Sound();
         this.sound.loadSounds(SOUNDS);
+
+        //this.accelaration();
     }
 
     setCircles () {
@@ -75,7 +78,7 @@ class Game {
             this.score -= 5;
         }
 
-        if (this.score === 300){
+        if (this.score >= 400){
             this.gameWin();
         }
 
@@ -86,6 +89,24 @@ class Game {
         this.dancer.dancerDirection = 'stop';
     }
 
+    accelaration() {
+        if (this.score === 50){
+            this.speed = 900;
+        }
+        if (this.score === 100){
+            this.speed = 800;
+        }
+        if (this.score === 150){
+            this.speed = 600;
+        }
+        if (this.score === 300){
+            this.speed = 500;
+        }
+        if (this.score === 350){
+            this.speed = 400;
+        }
+    }
+
 
     start(){
         this.sound.play('gameMusic', { volume: 1 });
@@ -94,22 +115,25 @@ class Game {
         }, 500);
     }
 
-    // gameWin(){
-    //     this.GameWin.paint();
-    //     this.sound.play('winMusic', { volume: 1 });
-    //     this.sound.stop('gameMusic');
-    //     randomCircle = false;
-    // }
+    gameWin(){
+        this.GameWin.paint();
+        this.sound.play('winMusic', { volume: 1 });
+        this.sound.stop('gameMusic');
+        document.getElementById("start-game").style.visibility="visible";
+        randomCircle = false;
+    }
 
     gameOver(){
         this.GameOver.paint();
         this.sound.play('gameOverMusic', { volume: 1 });
         this.sound.stop('gameMusic');
+        document.getElementById("start-game").style.visibility="visible";
         randomCircle = false;
         
     }
        
     runLogic(){
+        this.accelaration();
         this.checkIfRight();
         this.setCircles();
     }

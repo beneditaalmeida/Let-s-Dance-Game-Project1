@@ -13,6 +13,7 @@ class Comands{
 
     _paintCircle (x, y, active) {
         const context = this.game.context;
+        //const randomColor = 'rgb(' + rgb(255) + ',' + rgb(255) + ',' + rgb(255) + ')';
 
         context.fillStyle = active ? "pink" : "black";
         context.beginPath();
