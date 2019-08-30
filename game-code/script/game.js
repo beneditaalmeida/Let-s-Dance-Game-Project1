@@ -18,6 +18,8 @@ class Game {
         this.score = 20;
         this.timer = 0;
         this.speed = 1000;
+        this.trigger = true
+
 
         this.activeCircles = {
             up: false,
@@ -82,7 +84,7 @@ class Game {
             this.gameWin();
         }
 
-        if (this.score <= -5){
+        if (this.score <= -5 || this.trigger === false){
             this.gameOver();
         
         }
@@ -110,10 +112,17 @@ class Game {
 
     start(){
         this.sound.play('gameMusic', { volume: 1 });
+        if(this.trigger){
         setTimeout (() => {
             this.loop(0)
-        }, 500);
+        }, 800);
     }
+        setTimeout (() => {
+            this.trigger = false 
+        }, 240000);  
+    }
+
+
 
     gameWin(){
         this.GameWin.paint();
@@ -121,7 +130,14 @@ class Game {
         this.sound.stop('gameMusic');
         document.getElementById("start-game").style.visibility="visible";
         randomCircle = false;
+        this.resetGame();
     }
+
+    resetGame(){
+        this.timer = 0;
+        this.score = 0;
+    }
+
 
     gameOver(){
         this.GameOver.paint();
@@ -129,8 +145,11 @@ class Game {
         this.sound.stop('gameMusic');
         document.getElementById("start-game").style.visibility="visible";
         randomCircle = false;
-        
+        this.resetGame();
+        this.trigger = false
     }
+
+
        
     runLogic(){
         this.accelaration();
@@ -147,6 +166,7 @@ class Game {
         // Paint game state
         this.paint();
         // Run loop again
+        console.log(this.trigger)
         window.requestAnimationFrame(timestamp => {
             this.loop(timestamp);
         });
